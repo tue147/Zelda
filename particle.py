@@ -69,5 +69,17 @@ class ParticleEffect(pygame.sprite.Sprite):
             self.kill()
         else:
             self.image = self.frames[int(self.frame_index)]
-    def update(self):
+# a is an additional parameter
+    def update(self,a):
         self.animate()
+class Shadow(pygame.sprite.Sprite):
+    def __init__(self,entity,groups,sprite_type):
+        super().__init__(groups)
+        self.entity = entity
+        if sprite_type == 'raccoon':
+            self.pre_image = pygame.image.load('graphics\particles\shadow\Shadow.png').convert_alpha()
+            self.image = pygame.transform.scale2x(self.pre_image)
+            self.rect = self.image.get_rect(center = self.entity.midbottom)
+        else:
+            self.image = pygame.image.load('graphics\particles\shadow\Shadow.png').convert_alpha()
+            self.rect = self.image.get_rect(center = self.entity.midbottom)

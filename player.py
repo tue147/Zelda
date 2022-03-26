@@ -3,11 +3,14 @@ from settings import *
 from support import *
 from entity import Entity
 from sound import SoundPlayer
+from particle import Shadow
 
 class Player(Entity):
-    def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic):
+    def __init__(self,pos,groups,shadow_sprites,obstacle_sprites,create_attack,destroy_attack,create_magic):
         super().__init__(groups)
         '''basic'''
+        self.sprite_type = 'player'
+
         self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
         self.import_player_assets()
@@ -42,11 +45,14 @@ class Player(Entity):
         self.health = self.stats['health']
         self.energy = self.stats['energy']
         self.speed = self.stats['speed']
-        self.exp = 0
+        self.exp = 10000
         '''damage'''
         self.vulnerable = True
         self.hurt_time = 0
         self.invulnerable = 500
+
+        '''shadow'''
+        self.shadow = Shadow(self.rect,shadow_sprites,self.sprite_type)
 
         '''sprite'''
         self.obstacle_sprites = obstacle_sprites
@@ -164,12 +170,13 @@ class Player(Entity):
     def recover_energy(self):
         if self.energy <= self.stats['energy']:
             self.energy += 0.0003 * self.stats['energy']     
-
-    def update(self):
+# a is an additional parameter
+    def update(self,a):
         self.input()
         self.cooldowns()
         self.get_status()
-        self.animate()
         self.move(self.stats['speed'])
+        self.update_shadow()
+        self.animate()
         self.recover_energy()
             

@@ -89,13 +89,16 @@ class Item():
         pygame.draw.rect(surface,color,value_rect)
     def trigger(self,player):
         upgrade_atribute = list(player.stats.keys())[self.index]
+        if player.stats[upgrade_atribute] < player.max_stats[upgrade_atribute]:    
+                player.exp -= player.upgrade_cost[upgrade_atribute]
+                player.upgrade_cost[upgrade_atribute] *= 1.4
         if player.exp >= player.upgrade_cost[upgrade_atribute]:
             player.stats[upgrade_atribute] *= 1.2
-            if player.stats[upgrade_atribute] > player.max_stats[upgrade_atribute]:
+            if player.stats[upgrade_atribute] >= player.max_stats[upgrade_atribute]:
                 player.stats[upgrade_atribute] = player.max_stats[upgrade_atribute]
-                return
-            player.exp -= player.upgrade_cost[upgrade_atribute]
-            player.upgrade_cost[upgrade_atribute] *= 1.4
+            
+                
+            
 
     def display(self,surface,selection_num,name,value,max_value,cost):
         if self.index == selection_num:

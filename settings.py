@@ -21,11 +21,11 @@ HITBOX_OFFSET_X = {
 
 
 weapon_data = {
-    'sword': {'cooldown': 100, 'energy':2, 'damage': 15,'graphic':'graphics/weapons/sword/full.png'},
-    'lance': {'cooldown': 400, 'energy':6, 'damage': 30,'graphic':'graphics/weapons/lance/full.png'},
-    'axe': {'cooldown': 300, 'energy':4, 'damage': 20, 'graphic':'graphics/weapons/axe/full.png'},
-    'rapier':{'cooldown': 50, 'energy':1, 'damage': 8, 'graphic':'graphics/weapons/rapier/full.png'},
-    'sai':{'cooldown': 80, 'energy':1.2, 'damage': 10, 'graphic':'graphics/weapons/sai/full.png'}}
+    'sword': {'cooldown': 100, 'damage': 15,'graphic':'graphics/weapons/sword/full.png'},
+    'lance': {'cooldown': 400, 'damage': 30,'graphic':'graphics/weapons/lance/full.png'},
+    'axe': {'cooldown': 300, 'damage': 20, 'graphic':'graphics/weapons/axe/full.png'},
+    'rapier':{'cooldown': 50, 'damage': 8, 'graphic':'graphics/weapons/rapier/full.png'},
+    'sai':{'cooldown': 80, 'damage': 10, 'graphic':'graphics/weapons/sai/full.png'}}
 magic_data = {
     'flame': {'strength': 5,'cost': 20,'graphic':'graphics/particles/flame/fire.png'},
     'heal' : {'strength': 2.5,'cost': 10,'graphic':'graphics/particles/heal/heal.png'}}

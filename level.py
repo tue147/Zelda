@@ -18,7 +18,7 @@ class Level():
         #sprite group setup
         self.visible_sprites = YSortCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
-        self.enemy_sprites = YSortCameraGroup()
+        self.shadow_sprites = YSortCameraGroup()
         self.attack_sprites = pygame.sprite.Group()
         self.attackable_sprites = pygame.sprite.Group()
 
@@ -68,6 +68,7 @@ class Level():
                             if col == '394':
                                 self.player = Player((x,y),
                                 [self.visible_sprites],
+                                self.shadow_sprites,
                                 self.obstacle_sprites,
                                 self.create_attack,
                                 self.destroy_attack,
@@ -82,7 +83,8 @@ class Level():
                                 elif col == '393':
                                     enemy_name = 'squid'
                                 Enemy(enemy_name,(x,y),
-                                [self.enemy_sprites,self.attackable_sprites],
+                                [self.attackable_sprites,self.visible_sprites],
+                                self.shadow_sprites,
                                 self.obstacle_sprites,
                                 self.damage_player,
                                 self.enemy_death_particles,
@@ -117,9 +119,7 @@ class Level():
                                 detail = graphics['fence'][5]
                                 Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'detail',detail)
     def create_attack(self):
-        if self.player.energy >=  weapon_data[self.player.weapon]['energy']:    
-            self.current_attack = Weapon(self.player,[self.visible_sprites,self.attack_sprites])
-            self.player.energy -= weapon_data[self.player.weapon]['energy']
+        self.current_attack = Weapon(self.player,[self.visible_sprites,self.attack_sprites])
     def destroy_attack(self):
         if self.current_attack:
             self.current_attack.kill()
@@ -162,14 +162,13 @@ class Level():
         else:
             self.game_pause = False
     def run(self):
+        self.shadow_sprites.draw_shadow(self.player)
         self.visible_sprites.custom_draw(self.player)
-        self.enemy_sprites.custom_draw_enemy(self.player)
         self.ui.display(self.player)
         if self.game_pause:
             self.menu.display()
         else:
-            self.visible_sprites.update()
-            self.enemy_sprites.update(self.player)
+            self.visible_sprites.update(self.player)
             self.player_attack_logic(self.player)
             
 
@@ -188,14 +187,14 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.offset.y = player.rect.y - self.half_h
     def custom_draw(self,player):
         self.get_offset(player)
-        self.floor_offset_pos = self.floor_rect.topleft - self.offset
-        self.display_surface.blit(self.floor_surf,self.floor_offset_pos)
         for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image,offset_pos)
-    def custom_draw_enemy(self,player):
+    def draw_shadow(self,player):
         self.get_offset(player)
-        for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
+        self.floor_offset_pos = self.floor_rect.topleft - self.offset
+        self.display_surface.blit(self.floor_surf,self.floor_offset_pos)
+        for sprite in self.sprites():
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image,offset_pos)
 

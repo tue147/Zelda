@@ -1,6 +1,7 @@
 import pygame
 from math import sin
 
+
 class Entity(pygame.sprite.Sprite):
     def __init__(self,groups):
         super().__init__(groups)
@@ -9,7 +10,8 @@ class Entity(pygame.sprite.Sprite):
         self.animation_speed = 0.15
         
         self.direction = pygame.math.Vector2()
-
+        
+        self.display_surface = pygame.display.get_surface()
     def move(self,speed):
         if self.direction.magnitude() > 0:
             self.direction = self.direction.normalize()
@@ -51,4 +53,18 @@ class Entity(pygame.sprite.Sprite):
             return 255
         else:
             return 0
+    def update_shadow(self):
+        if self.sprite_type == 'spirit':
+            self.shadow.rect.center = self.rect.midbottom - pygame.math.Vector2(0,6)
+        elif self.sprite_type == 'raccoon':
+            self.shadow.rect.center = self.rect.midbottom - pygame.math.Vector2(0,25)
+        elif self.sprite_type == 'squid':
+            self.shadow.rect.center = self.rect.midbottom - pygame.math.Vector2(0,6)
+        elif self.sprite_type == 'bamboo':
+            self.shadow.rect.center = self.rect.midbottom - pygame.math.Vector2(0,4)
+        else:
+            self.shadow.rect.center = self.rect.midbottom
+        
+        
+        
     

@@ -3,11 +3,12 @@ from settings import *
 from entity import Entity
 from sound import SoundPlayer
 from support import *
+from particle import Shadow
 
 class Enemy(Entity):
-    def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player,death_particles,add_exp):
+    def __init__(self,monster_name,pos,groups,shadow_sprites,obstacle_sprites,damage_player,death_particles,add_exp):
         super().__init__(groups)
-        self.sprite_type = 'enemy'
+        self.sprite_type = f'{monster_name}'
         self.import_graphics(monster_name)
         self.status = 'idle'
 
@@ -45,8 +46,12 @@ class Enemy(Entity):
         
         self.can_knockback = True
         self.knockback_cooldown = 1000
-
+        
+        '''sprite'''
         self.obstacle_sprites = obstacle_sprites 
+        
+        '''shadow'''
+        self.shadow = Shadow(self.rect,shadow_sprites,self.sprite_type)
 
     def import_graphics(self,name):
         self.animation = {'idle':[], 'move':[], 'attack':[]}
@@ -123,6 +128,7 @@ class Enemy(Entity):
     def check_death(self):
         if self.health <= 0:
             self.death_particles(self.rect.center,self.monster_name)
+            self.shadow.kill()
             self.kill()
             self.add_exp(self.exp)
             self.death_sound = SoundPlayer('death')
@@ -138,6 +144,7 @@ class Enemy(Entity):
         self.hit_reaction(player)
         self.move(self.speed)
         self.cooldown()
+        self.update_shadow()
         self.animate()
         self.check_death()        
 
